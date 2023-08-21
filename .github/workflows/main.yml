@@ -47,7 +47,7 @@ jobs:
         node-version: 'latest'
     - name: Install Dependency       
       run: |
-        node /main/parser.js
+        node ./main/parser.js
     - name: copy result
       run: |
         cp ./main/ASSD/* ./json -r
