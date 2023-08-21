@@ -59,3 +59,14 @@ jobs:
         git add -A
         git commit --allow-empty -m 'Update json'
         git push
+    - name: upload
+      uses: haloislet/cos-action@v2
+      with:
+        COMMAND: coscmd upload -r ./ /
+        SECRET_ID: ${{ secrets.SECRET_ID }}
+        SECRET_KEY: ${{ secrets.SECRET_KEY }}
+        BUCKET: ${{ secrets.BUCKET }}
+        REGION: ${{ secrets.REGION }}
+    - name: uploadres
+      run: |
+        coscmd upload -rs --delete ./json /ASSD
