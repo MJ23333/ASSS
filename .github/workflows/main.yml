@@ -31,7 +31,7 @@ jobs:
         submodules: 'recursive'
     - uses: actions/checkout@v3
       with:
-        repository: MJ23333/ArknightsStory
+        repository: MJ23333/ASSS
         ref: json
         path: json
     - name: clear
