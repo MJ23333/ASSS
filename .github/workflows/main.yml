@@ -1,0 +1,69 @@
+name: main
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  schedule:
+    - cron: '0 */6 * * *'
+    
+env:
+  CARGO_TERM_COLOR: always
+
+
+permissions:
+  pull-requests: write
+  issues: write
+  repository-projects: write
+  contents: write
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        path: main
+        submodules: 'recursive'
+    - uses: actions/checkout@v3
+      with:
+        repository: MJ23333/ASSS
+        ref: json
+        path: json
+    - name: clear
+      run: |
+        cd ./json
+        git rm -r *
+        cd ..
+    - uses: actions/setup-node@v3
+      with:
+    # Version Spec of the version to use in SemVer notation.
+    # It also emits such aliases as lts, latest, nightly and canary builds
+    # Examples: 12.x, 10.15.1, >=10.15.0, lts/Hydrogen, 16-nightly, latest, node
+        node-version: 'latest'
+    - name: Install Dependency       
+      run: |
+        cd ./main
+        node parser.js
+        cd ..
+    - name: copy result
+      run: |
+        cp ./main/ASSD/* ./json -r
+        cd ./json
+        git config --global user.email mengji233@gmail.com
+        git config --global user.name update_bot
+        git add -A
+        git commit --allow-empty -m 'Update json'
+        git push
+    - name: upload
+      uses: haloislet/cos-action@v2
+      with:
+        COMMAND: coscmd upload -rs --delete ./json /ASSD --include *.json
+        SECRET_ID: ${{ secrets.SECRET_ID }}
+        SECRET_KEY: ${{ secrets.SECRET_KEY }}
+        BUCKET: ${{ secrets.BUCKET }}
+        REGION: ${{ secrets.REGION }}
