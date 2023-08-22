@@ -344,8 +344,8 @@ function parseTxt(storyMeta) {
             case "character":
                 // console.log(lines[id]);
                 if (lines[id].name&&typeof lines[id].name==="string") {
-                    if (lines[id].focus&&(lines[id]["name" + (parseInt(lines[id].focus,10) > 1 ? lines[id].focus : "")])) {
-                        current_figure = fun_char_link(lines[id]["name" + (parseInt(lines[id].focus,10) > 1 ? lines[id].focus : "")]);
+                    if (lines[id].focus&&(lines[id]["name" + (Number(lines[id].focus,10) > 1 ? lines[id].focus : "")])) {
+                        current_figure = fun_char_link(lines[id]["name" + (Number(lines[id].focus,10) > 1 ? lines[id].focus : "")]);
                     } else {
                         current_figure = fun_char_link(lines[id].name);
                     }
@@ -394,6 +394,11 @@ function parseTxt(storyMeta) {
                 // console.log(lines[id]);
                 lines[id].options = lines[id].options.split(";");
                 lines[id].values = lines[id].values.split(";");
+                var opts={};
+                for(var opt in lines[id].options){
+                    opts[Number(lines[id].values[opt])]=lines[id].options[opt];
+                }
+                lines[id].options=opts;
                 // console.log(lines[id]);
                 current_decision_id = id;
                 current_predicate_id = null;
@@ -410,7 +415,7 @@ function parseTxt(storyMeta) {
                     if (checkSubSet(lines[current_decision_id].values, lines[id].references)) {
                         current_predicate_id = id;
                         for (var ref of lines[id].references) {
-                            lines[current_decision_id].options[parseInt(ref) - 1] = { id: id, text: lines[current_decision_id].options[parseInt(ref) - 1] }
+                            lines[current_decision_id].options[Number(ref)] = { id: id, text: lines[current_decision_id].options[Number(ref)] }
                         }
                         lines[current_decision_id].values = lines[current_decision_id].values.filter((el) => !lines[id].references.includes(el));
 
