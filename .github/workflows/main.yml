@@ -62,7 +62,7 @@ jobs:
     - name: upload
       uses: haloislet/cos-action@v2
       with:
-        COMMAND: coscmd upload -rs --delete ./json /ASSD --include *.json
+        COMMAND: ecgo y | coscmd upload -rs --delete ./json /ASSD --include *.json
         SECRET_ID: ${{ secrets.SECRET_ID }}
         SECRET_KEY: ${{ secrets.SECRET_KEY }}
         BUCKET: ${{ secrets.BUCKET }}
