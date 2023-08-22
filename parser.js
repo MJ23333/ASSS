@@ -217,11 +217,11 @@ function fun_char_link(key_data) {
         links = linkmap;
     let m = key_data.match(/^([^@#$]+)(?:([@#$])([a-z\d]+)|#(\d+)\$(\d+))?$/);
     if (m == null) {
-        return [-1, -1];
+        return fun_char_format([-1, -1]);
     }
     (n = m[1]), (i = m[3]);
     if (links[n] == undefined) {
-        return [-1, -1];
+        return fun_char_format([-1, -1]);
     }
     if (m[2] == '$' || (m[4] && m[5])) {
         let g = '$' + (m[5] || i); //group
@@ -229,15 +229,10 @@ function fun_char_link(key_data) {
         let ps = links[n].array.findIndex((v) => v.name.endsWith(g)),
             pe = links[n].array.findIndex((v, vi) => !v.name.endsWith(g) && vi > ps);
         if (ps == -1) {
-            fun_msg(
-                -1,
-                false,
-                'The analyze key [' + n + ':' + i + '] not exist,use the default char to instead.'
-            );
-            return [n, 0];
+            return fun_char_format([n, 0]);
         }
         pe = pe == -1 ? links[n].array.length - 1 : pe - 1;
-        if (m[2]) return [n, ps];
+        if (m[2]) return fun_char_format([n, ps]);
         try {
             i--;
         } catch (err) {
@@ -246,7 +241,7 @@ function fun_char_link(key_data) {
         if (i > pe - ps) {
             i = ps;
         }
-        return [n, i + ps];
+        return fun_char_format([n, i + ps]);
     } else if (m[2] == '#') {
         try {
             i--;
@@ -256,7 +251,7 @@ function fun_char_link(key_data) {
         if (i >= links[n].array.length) {
             i = 0;
         }
-        return [n, i];
+        return fun_char_format([n, i]);
     } else if (m[2] == '@') {
         for (let idx = 0; idx < links[n].array.length; idx++)
             if (links[n].array[idx].alias == i) return [n, idx];
@@ -268,9 +263,9 @@ function fun_char_format(keys) {
     var key = keys[0],
         idx = keys[1];
     if (!linkmap[key]) {
-        return key;
+        return null;
     }
-    return linkmap[key].array[idx].name;
+    return charmap[linkmap[key].array[idx].name];
 }
 function transslot(slot){
     if (slot=="right"||slot=="r"){
@@ -313,7 +308,7 @@ function parseTxt(storyMeta) {
             }
         } else if (match_dialogue) {
             const [, name, after] = match_dialogue;
-            line_dialogue["type"] = "Dialogue";
+            line_dialogue["type"] = "dialogue";
             line_dialogue["name"] = name;
             if (after) {
                 line_dialogue["text"] = after.trim();
@@ -325,7 +320,7 @@ function parseTxt(storyMeta) {
             line_dialogue['param'] = paramValue;
         }
         else {
-            line_dialogue["type"] = "Text";
+            line_dialogue["type"] = "text";
             line_dialogue["text"] = line_raw.trim();
         }
         line_dialogue.id = lrid;
