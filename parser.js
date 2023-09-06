@@ -215,6 +215,7 @@ function fun_char_link(key_data) {
     let n,
         i,
         links = linkmap;
+    // console.log(key_data);
     let m = key_data.match(/^([^@#$]+)(?:([@#$])([a-z\d]+)|#(\d+)\$(\d+))?$/);
     if (m == null) {
         return fun_char_format([-1, -1]);
@@ -337,11 +338,13 @@ function parseTxt(storyMeta) {
         switch (lines[id].type) {
 
             case "character":
+                console.log(lines[id]);
                 // console.log(lines[id]);
                 if (lines[id].name&&typeof lines[id].name==="string") {
                     if (lines[id].focus&&(lines[id]["name" + (Number(lines[id].focus,10) > 1 ? lines[id].focus : "")])) {
                         current_figure = fun_char_link(lines[id]["name" + (Number(lines[id].focus,10) > 1 ? lines[id].focus : "")]);
                     } else {
+                        console.log(lines[id].name);
                         current_figure = fun_char_link(lines[id].name);
                     }
                 } else {
@@ -357,9 +360,9 @@ function parseTxt(storyMeta) {
                         current_figure = fun_char_link(char_slot[transslot(lines[id].slot)]);
                     }
                 }
-                if (lines[id].focus && transslot(lines[id].focus) != "n") {
-                    // console.log(char_slot);
-                    current_figure = fun_char_link(char_slot[transslot(lines[id].slot)]);
+                // console.log(char_slot);
+                if (lines[id].focus && char_slot[transslot(lines[id].focus)]) {
+                    current_figure = fun_char_link(char_slot[transslot(lines[id].focus)]);
                 }
                 if(Object.keys(lines[id]).length<=1) {
                     char_slot = {};
@@ -432,7 +435,12 @@ function parseTxt(storyMeta) {
                 break;
             case "image":
                 if(lines[id].image){
-                    lines[id].image=imagemap[lines[id].image];
+                    if(!imagemap[lines[id].image.toLowerCase()]){
+                        console.log(lines[id].image);
+                    }else{
+                        lines[id].image=imagemap[lines[id].image.toLowerCase()];
+                    }
+                    
                 }
             case "background":
                 if(lines[id].image){
@@ -501,7 +509,7 @@ for (var [key, activity] of Object.entries(activities)) {
             activity.infoUnlockDatas[story_meta_id].next=Number(story_meta_id)+1;
         }
         activity.infoUnlockDatas[story_meta_id].storyInfo = fs.readFileSync(prefix + 'story/[uc]'+activity.infoUnlockDatas[story_meta_id].storyInfo+'.txt').toString();
-        console.log(activity.infoUnlockDatas[story_meta_id].storyName);
+        // console.log(activity.infoUnlockDatas[story_meta_id].storyName);
         
         var res = parseTxt(activity.infoUnlockDatas[story_meta_id])
         activity.infoUnlockDatas[story_meta_id].characters = res.characters;
