@@ -81,7 +81,7 @@ const source_url = "https://static.prts.wiki/";
         if(res[k].toString().indexOf("sound_beta_2") == -1) continue;
         res[k] = res[k].replace("sound_beta_2",source_url + "music") + ".mp3";
     }
-    console.log(res);
+    // console.log(res);
     res["btn_click"] = source_url + "music/general/g_ui/g_ui_btn_n.mp3";
     // unparsed=unparsed.replaceAll("</includeonly>","").replaceAll("<includeonly>","");
     return res;
@@ -99,7 +99,7 @@ const source_url = "https://static.prts.wiki/";
 }
  async function getImage(name) {
     var endpoint = "https://prts.wiki/api.php?action=query&titles=&origin=*&titles=文件:" + name+"&prop=imageinfo&iiprop=url&format=json";
-    console.log(endpoint);
+    // console.log(endpoint);
     const response = await fetch(endpoint);
     let data = await response.json();
     // console.log(data);
@@ -113,7 +113,7 @@ const source_url = "https://static.prts.wiki/";
     }
     endpoint=endpoint.slice(0,-1);
     endpoint+="&prop=imageinfo&iiprop=url&format=json";
-    console.log(endpoint);
+    // console.log(endpoint);
     const response = await fetch(endpoint);
     let data = await response.json();
     // console.log(data);
@@ -170,12 +170,12 @@ function chunk(array, size) {
     for (var q of queries){
         r.push(await getCover(q))
     }
-    console.log(r);
+    // console.log(r);
     const covers = r.flat().reduce((obj, item) => ({
         ...obj,
         [item.key]: item.value
       }), {});
-    console.log(covers);
+    // console.log(covers);
     mainline_count=1;
     for (var act of activities){
         // console.log(act);
@@ -286,6 +286,7 @@ function parseTxt(storyMeta) {
     const r1 = /\[(\w+)(?:\((.*?)\))?\](.*)/;
     const r2 = /\[name="([^"]*)"\](.*)/;
     const r3 = /\[(\w+)=(".*?"|\d+)\]/;
+    var asd=false;
     var lines = [];
     var characters = new Set();
     var lrid = 0;
@@ -338,13 +339,13 @@ function parseTxt(storyMeta) {
         switch (lines[id].type) {
 
             case "character":
-                console.log(lines[id]);
+                // console.log(lines[id]);
                 // console.log(lines[id]);
                 if (lines[id].name&&typeof lines[id].name==="string") {
                     if (lines[id].focus&&(lines[id]["name" + (Number(lines[id].focus,10) > 1 ? lines[id].focus : "")])) {
                         current_figure = fun_char_link(lines[id]["name" + (Number(lines[id].focus,10) > 1 ? lines[id].focus : "")]);
                     } else {
-                        console.log(lines[id].name);
+                        // console.log(lines[id].name);
                         current_figure = fun_char_link(lines[id].name);
                     }
                 } else {
@@ -434,14 +435,18 @@ function parseTxt(storyMeta) {
 
                 break;
             case "image":
+                
                 if(lines[id].image){
                     if(!imagemap[lines[id].image.toLowerCase()]){
                         console.log(lines[id].image);
                     }else{
+                        
                         lines[id].image=imagemap[lines[id].image.toLowerCase()];
+                        
                     }
                     
                 }
+                break;
             case "background":
                 if(lines[id].image){
                     lines[id].image=imagemap['bg_' + lines[id].image.toLowerCase()]
