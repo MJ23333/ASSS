@@ -39,6 +39,7 @@ jobs:
         cd ./json
         git rm -r *
         cd ..
+        git submodule update --remote
     - uses: actions/setup-node@v3
       with:
     # Version Spec of the version to use in SemVer notation.
