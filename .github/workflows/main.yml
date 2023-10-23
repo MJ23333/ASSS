@@ -31,8 +31,10 @@ jobs:
         submodules: 'recursive'
     - name: Git Sumbodule Update
       run: |
+        cd ./main
         git pull --recurse-submodules
         git submodule update --remote --recursive
+        cd ..
     - uses: actions/checkout@v3
       with:
         repository: MJ23333/ASSS
