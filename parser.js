@@ -365,7 +365,10 @@ function parseTxt(storyMeta) {
                 if (lines[id].focus && char_slot[transslot(lines[id].focus)]) {
                     current_figure = fun_char_link(char_slot[transslot(lines[id].focus)]);
                 }
-                if(Object.keys(lines[id]).length<=1) {
+                if(lines[id].focus && transslot(lines[id].focus)=='n'){
+                    current_figure=null;
+                }
+                if(!lines[id].name&&!lines[id].focus) {
                     char_slot = {};
                     current_figure = null;
                 }
