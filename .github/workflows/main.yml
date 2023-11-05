@@ -29,6 +29,12 @@ jobs:
       with:
         path: main
         submodules: 'recursive'
+    - name: Git Sumbodule Update
+      run: |
+        cd ./main
+        git pull --recurse-submodules
+        git submodule update --remote --recursive
+        cd ..
     - uses: actions/checkout@v3
       with:
         repository: MJ23333/ASSS
@@ -62,7 +68,7 @@ jobs:
     - name: upload
       uses: haloislet/cos-action@v2
       with:
-        COMMAND: ecgo y | coscmd upload -rs --delete ./json /ASSD --include *.json
+        COMMAND: coscmd upload -rs ./json /ASSD --include *.json
         SECRET_ID: ${{ secrets.SECRET_ID }}
         SECRET_KEY: ${{ secrets.SECRET_KEY }}
         BUCKET: ${{ secrets.BUCKET }}
