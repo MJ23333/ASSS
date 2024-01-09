@@ -114,13 +114,14 @@ const source_url = "https://static.prts.wiki/";
     endpoint=endpoint.slice(0,-1);
     endpoint+="&prop=imageinfo&iiprop=url&format=json";
     // console.log(endpoint);
+    // console.log(endpoint);
     const response = await fetch(endpoint);
     let data = await response.json();
     // console.log(data);
     var covers=[];
     let keys = Object.keys(data.query.pages)
     for(var page of keys){
-        covers.push({key:data.query.pages[page].title.replace("文件:",""),value:data.query.pages[page].imageinfo[0].url});
+        covers.push({key:data.query.pages[page].title.replace("文件:",""),value:data.query.pages[page].imageinfo?data.query.pages[page].imageinfo[0].url:""});
     }
     return covers;
 }
@@ -212,6 +213,7 @@ function fun_get_audio_url(key) {
         : source_url + p.replace('sound_beta_2', 'music') + '.mp3';
 }
 function fun_char_link(key_data) {
+    // console.log(line);
     let n,
         i,
         links = linkmap;
@@ -343,7 +345,9 @@ function parseTxt(storyMeta) {
                 // console.log(lines[id]);
                 if (lines[id].name&&typeof lines[id].name==="string") {
                     if (lines[id].focus&&(lines[id]["name" + (Number(lines[id].focus,10) > 1 ? lines[id].focus : "")])) {
-                        current_figure = fun_char_link(lines[id]["name" + (Number(lines[id].focus,10) > 1 ? lines[id].focus : "")]);
+                        // console.log(lines[id]);
+                        // console.log("name" + (Number(lines[id].focus) > 1 ? lines[id].focus : ""));
+                        current_figure = fun_char_link(lines[id]["name" + (Number(lines[id].focus) > 1 ? lines[id].focus : "")],lines[id]);
                     } else {
                         // console.log(lines[id].name);
                         current_figure = fun_char_link(lines[id].name);
@@ -354,7 +358,7 @@ function parseTxt(storyMeta) {
                 break;
             case "charslot":
                 // console.log(lines[id]);
-                if (lines[id].name) {
+                if (lines[id].name&&typeof(lines[id].name)=='string') {
                     // console.log(char_slot);
                     char_slot[transslot(lines[id].slot)] = lines[id].name;
                     if (!lines[id].focus) {
@@ -362,6 +366,7 @@ function parseTxt(storyMeta) {
                     }
                 }
                 // console.log(char_slot);
+                // console.log(storyMeta.storyTxt);
                 if (lines[id].focus && char_slot[transslot(lines[id].focus)]) {
                     current_figure = fun_char_link(char_slot[transslot(lines[id].focus)]);
                 }
