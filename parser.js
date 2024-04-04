@@ -60,7 +60,7 @@ function stringToObject(input) {
 
     for (const line of lines) {
         const [key, value] = line.split(',');
-        result[key.trim()] = "https://prts.wiki"+value.trim();
+        result[key.trim()] = value.trim();
     }
 
     return result;
