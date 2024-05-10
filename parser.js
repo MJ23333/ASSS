@@ -525,7 +525,9 @@ for (var [key, activity] of Object.entries(activities)) {
         if(activity.infoUnlockDatas[story_meta_id].storyInfo!=null){
             activity.infoUnlockDatas[story_meta_id].storyInfo = fs.readFileSync(prefix + 'story/[uc]'+activity.infoUnlockDatas[story_meta_id].storyInfo+'.txt').toString();
         }
-        activity.infoUnlockDatas[story_meta_id].storyInfo = "";
+        else{
+            activity.infoUnlockDatas[story_meta_id].storyInfo = "";
+        }
         // console.log(activity.infoUnlockDatas[story_meta_id].storyName);
         
         var res = parseTxt(activity.infoUnlockDatas[story_meta_id])
