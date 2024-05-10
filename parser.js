@@ -521,7 +521,11 @@ for (var [key, activity] of Object.entries(activities)) {
         if(story_meta_id<activity.infoUnlockDatas.length-1){
             activity.infoUnlockDatas[story_meta_id].next=Number(story_meta_id)+1;
         }
-        activity.infoUnlockDatas[story_meta_id].storyInfo = fs.readFileSync(prefix + 'story/[uc]'+activity.infoUnlockDatas[story_meta_id].storyInfo+'.txt').toString();
+        // console.log(activity.infoUnlockDatas[story_meta_id]);
+        if(activity.infoUnlockDatas[story_meta_id].storyInfo!=null){
+            activity.infoUnlockDatas[story_meta_id].storyInfo = fs.readFileSync(prefix + 'story/[uc]'+activity.infoUnlockDatas[story_meta_id].storyInfo+'.txt').toString();
+        }
+        activity.infoUnlockDatas[story_meta_id].storyInfo = "";
         // console.log(activity.infoUnlockDatas[story_meta_id].storyName);
         
         var res = parseTxt(activity.infoUnlockDatas[story_meta_id])
